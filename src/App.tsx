@@ -1,25 +1,23 @@
-import axios from 'axios';
-import React, { useEffect, useState } from 'react';
+import { Loader } from './components/Loader';
 import { Product } from './components/Product';
-//import { products } from './data/products';
-import { IProduct } from './models';
-
+import { useProducts } from './hooks/products';
+import {ErrorMessage} from './components/ErrorMessage'
+import Modal from './components/Modal';
+import CreateProduct from './components/CreateProduct';
+import { useState } from 'react';
 function App() {
-  const [products, setProducts] = useState<IProduct[]>([]);
-  async function FetchProducts(){
-    const response = await axios.get<IProduct[]>("https://fakestoreapi.com/products?limit=5")
-    setProducts(response.data);
-  }
-
-  useEffect(() =>{
-    FetchProducts();
-  }, []);
+  const {loading, error, products} = useProducts();
+  const [modal, setModal] = useState(true);
   return(
     <div className='container mx-auto max-w-2xl pt-5'>
+      {loading && <Loader/>}
+      {error && <ErrorMessage error={error}/>}
         {
           products.map(product => <Product product={product} key={product.id}/>)
         }
-       
+       {modal &&  <Modal title='Create new product'>
+         <CreateProduct onCreate={() => setModal(false)}></CreateProduct>
+       </Modal>}
     </div>
   )
 }
