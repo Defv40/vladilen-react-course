@@ -1,20 +1,24 @@
-import React, { useState } from 'react';
+import axios from 'axios';
+import React, { useEffect, useState } from 'react';
 import { Product } from './components/Product';
-import { products } from './data/products';
+//import { products } from './data/products';
+import { IProduct } from './models';
 
 function App() {
-  const [count, setCount] = useState(10);
-  const increment = () =>{
-    setCount(count + 1);
+  const [products, setProducts] = useState<IProduct[]>([]);
+  async function FetchProducts(){
+    const response = await axios.get<IProduct[]>("https://fakestoreapi.com/products?limit=5")
+    setProducts(response.data);
   }
-  const dicrement = () => setCount(count - 1)
+
+  useEffect(() =>{
+    FetchProducts();
+  }, []);
   return(
-    <div>
-        <h1 className='text-3xl font-bold'>{count}</h1>
-        <button onClick={increment} className="pt-5 pr-5 bg-cyan-700">UP</button>
-        <button onClick={dicrement} className="pt-5 pr-5 bg-purple-600">Down</button>
-        <Product product={products[0]}/>
-        <Product product={products[1]}/>
+    <div className='container mx-auto max-w-2xl pt-5'>
+        {
+          products.map(product => <Product product={product} key={product.id}/>)
+        }
        
     </div>
   )
