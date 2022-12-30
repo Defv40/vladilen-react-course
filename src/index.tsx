@@ -4,16 +4,17 @@ import './index.css';
 import App from './App';
 import { ModalState } from './context/Modalcontext';
 import { BrowserRouter } from 'react-router-dom';
+import { Navigation } from './components/Navigation';
 
 
 const root = ReactDOM.createRoot(
   document.getElementById('root') as HTMLElement
 );
 root.render(
-  <BrowserRouter>
-    <ModalState>
-      <App/>
-    </ModalState>
-  </BrowserRouter>
+    <BrowserRouter>
+      <ModalState>
+        <App/>
+      </ModalState>
+    </BrowserRouter>
 );
 
